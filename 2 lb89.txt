@@ -1,0 +1,157 @@
+//Student.java file
+package Hibernate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name="Student2")
+
+public class Student {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int sid;
+	@Column(name="user_name")
+	private String sname;
+	@Column(name="city")
+	private String city;
+	@Column(name="qualification")
+	private String qualification;
+	public Student() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public int getSid() {
+		return sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public int getCity() {
+		return city;
+	}
+	public String getQualification() {
+		return qualification;
+	}
+	public void setSid(int sid) {
+		this.sid = sid;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public void setQualification(String qualification) {
+		this.qualification = qualification;
+	}
+
+
+}
+
+//Main.java file 
+package Hibernate;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class Main {
+
+	public static void main(String[] args) {
+		StandardServiceRegistry ssr=new StandardServiceRegistryBuilder().configure("config.xml").build();
+		Metadata meta=new MetadataSources(ssr).getMetadataBuilder().build();
+		
+		SessionFactory sfactory=meta.buildSessionFactory();
+		Session session=sfactory.openSession();
+		
+		Transaction t=session.beginTransaction();
+		try {
+		Student s1=new Student();
+		s1.setSname("Bhavya");
+		s1.setCity("Hyd");
+		s1.setQualification("Btech");
+		
+		Student s2=new Student();
+		s2.setSname("Shreeya");
+		s2.setCity("Mlg");
+		s2.setQualification("Btech");
+		
+		Student s3=new Student();
+		s3.setSname("Keerthana");
+		s3.setCity("Nlg");
+		s3.setQualification("Mtech");
+		
+		session.save(s1);
+		session.save(s2);
+		session.save(s3);
+		
+		t.commit();
+		}finally {
+			sfactory.close();
+			session.close();
+		}
+
+	}
+
+
+	}
+
+
+//configuration file
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- Database connection settings -->
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/bhavya1</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">PHW#84#jeor</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+
+    <!-- JDBC connection pool settings -->
+    <property name="hibernate.c3p0.min_size">5</property>
+    <property name="hibernate.c3p0.max_size">20</property>
+    <!-- Other Hibernate properties -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <mapping class="Hibernate.Student"/> 
+  </session-factory>
+</hibernate-configuration>
+
+//Pom.Xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Hibernate</groupId>
+  <artifactId>4-Hibernate</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+      <dependencies>
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.0.0.Alpha8</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.29</version>
+		</dependency>
+
+	</dependencies>
+
+</project>
+
+
